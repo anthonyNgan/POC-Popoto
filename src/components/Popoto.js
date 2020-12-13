@@ -12,12 +12,6 @@ class Popoto extends Component {
 
     popotoConfig() {
         // Demo Neo4j database settings hosted on GrapheneDb
-        // popoto.rest.CYPHER_URL = "https://db-d0nijwvvx54p9aalxhmr.graphenedb.com:24780/db/neo4j/tx/commit";
-        // popoto.rest.AUTHORIZATION = "neo4j db-d0nijwvvx54";
-        // popoto.rest.AUTHORIZATION = "Basic cG9wb3RvOmIuVlJZQVF2blZjV2tyLlRaYnpmTks5aHp6SHlTdXk=";
-        // popoto.rest.CYPHER_URL = "neo4j://b9dcbc7d.databases.neo4j.io:7687";
-        // popoto.rest.AUTHORIZATION = "neo4j:5QcMcr8g_0LU3H33qjdRUjNqjdYIt2eXy0Xd7UN8Gaw";
-        
         popoto.rest.PROTOCOL = "https";
         popoto.rest.HOST = "db-d0nijwvvx54p9aalxhmr.graphenedb.com";
         popoto.rest.PORT = "24780";
@@ -32,8 +26,19 @@ class Popoto extends Component {
         popoto.rest.WITH_CREDENTIALS = false;
         popoto.rest.ENCRYPTION = "ENCRYPTION_ON";
 
-        popoto.rest.CYPHER_URL = "https://db-d0nijwvvx54p9aalxhmr.graphenedb.com:24780/db/neo4j/tx/commit";
-        popoto.rest.AUTHORIZATION = "neo4j db-d0nijwvvx54";
+        //Game of thronesDB
+        // popoto.rest.CYPHER_URL = "https://db-d0nijwvvx54p9aalxhmr.graphenedb.com:24780/db/neo4j/tx/commit";
+        // popoto.rest.AUTHORIZATION = "neo4j db-d0nijwvvx54";
+
+        //MovieDB
+        popoto.rest.CYPHER_URL = "https://db-kh9ct9ai1mqn6hz2itry.graphenedb.com:24780/db/data/transaction/commit";
+        popoto.rest.AUTHORIZATION = "Basic cG9wb3RvOmIuVlJZQVF2blZjV2tyLlRaYnpmTks5aHp6SHlTdXk=";
+
+        // var data = {
+        //     blah: "bob"
+        // }
+
+        // popoto.rest.post(URL, data);
         
         // function createDriver(){
             
@@ -49,14 +54,14 @@ class Popoto extends Component {
         // Define the list of label provider to customize the graph behavior:
         // Only two labels are used in Neo4j movie graph example: "Movie" and "Person"
         popoto.provider.node.Provider = {
-            
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",           
-
-            "Character": {
-                "returnAttributes": ["name"],
+            "Movie": {
+                "returnAttributes": ["title", "released", "tagline"],
+                "constraintAttribute": "title"
+            },
+            "Person": {
+                "returnAttributes": ["name", "born"],
                 "constraintAttribute": "name",
-
+                // Customize result display for Person nodes:
                 "displayResults": function (pResultElmt) {
                     // Here D3.js mechanisms is used to generate HTML code.
                     // By default Popoto.js generates a <p> element for each result.
@@ -75,8 +80,7 @@ class Popoto extends Component {
                         return "Age: " + (new Date().getFullYear() - result.attributes.born);
                     });
                 }
-
-            },
+            }
         };
         // Change the number of displayed results:
         popoto.result.RESULTS_PAGE_SIZE = 20;
@@ -88,7 +92,7 @@ class Popoto extends Component {
         });
         // Add a listener on new relation added
         popoto.graph.on(popoto.graph.Events.GRAPH_NODE_RELATION_ADD, function (relations) {
-            var newRelation = relations[1];
+            var newRelation = relations[0];
             // Collapse all expanded choose nodes first to avoid having value node in selection.
             popoto.graph.node.collapseAllNode();
             var linksToRemove = popoto.dataModel.links.filter(function (link) {
@@ -102,7 +106,7 @@ class Popoto extends Component {
             popoto.update();
         });
         // Start the generation using parameter as root label of the query.
-        popoto.start("Character");
+        popoto.start("Person");
     }
 
     render() {
