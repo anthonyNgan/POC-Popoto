@@ -25,12 +25,14 @@ class Popoto extends Component {
         
 
         //Game of thronesDB
-        // popoto.rest.CYPHER_URL = "https://db-d0nijwvvx54p9aalxhmr.graphenedb.com:24786/db/neo4j/tx";
+        popoto.rest.CYPHER_URL = "https://db-d0nijwvvx54p9aalxhmr.graphenedb.com:24780/db/neo4j/tx/commit";
         // popoto.rest.AUTHORIZATION = "neo4j:db-d0nijwvvx54";
 
+        popoto.rest.AUTHORIZATION = "Basic " + btoa("neo4j:db-d0nijwvvx54");
+
         //MovieDB
-        popoto.rest.CYPHER_URL = "https://db-kh9ct9ai1mqn6hz2itry.graphenedb.com:24780/db/data/transaction/commit";
-        popoto.rest.AUTHORIZATION = "Basic cG9wb3RvOmIuVlJZQVF2blZjV2tyLlRaYnpmTks5aHp6SHlTdXk=";
+        // popoto.rest.CYPHER_URL = "https://db-kh9ct9ai1mqn6hz2itry.graphenedb.com:24780/db/data/transaction/commit";
+        // popoto.rest.AUTHORIZATION = "Basic cG9wb3RvOmIuVlJZQVF2blZjV2tyLlRaYnpmTks5aHp6SHlTdXk=";
 
         popoto.rest.CONFIG = {trust: "TRUST_ALL_CERTIFICATES"};
         popoto.rest.WITH_CREDENTIALS = false;
@@ -48,14 +50,9 @@ class Popoto extends Component {
         // }
 
         popoto.provider.node.Provider = {
-            "Movie": {
-                "returnAttributes": ["title", "released", "tagline"],
-                "constraintAttribute": "title"
-            },
-            "Person": {
-                "returnAttributes": ["name", "born"],
+            "Character": {
+                "returnAttributes": ["name", "pagerank", "community"],
                 "constraintAttribute": "name",
-                // Customize result display for Person nodes:
                 "displayResults": function (pResultElmt) {
                     // Here D3.js mechanisms is used to generate HTML code.
                     // By default Popoto.js generates a <p> element for each result.
@@ -66,13 +63,6 @@ class Popoto extends Component {
                         .text(function (result) {
                             return result.attributes.name;
                         });
-                    // A <span> element with the computed age from born attribute
-                    pResultElmt.filter(function (result) {
-                        // Filter on attribute having born attribute value
-                        return result.attributes.born;
-                    }).append("span").text(function (result) {
-                        return "Age: " + (new Date().getFullYear() - result.attributes.born);
-                    });
                 }
             }
         };
@@ -100,7 +90,7 @@ class Popoto extends Component {
             popoto.update();
         });
         // Start the generation using parameter as root label of the query.
-        popoto.start("Person");
+        popoto.start("Character");
     }
 
     render() {
