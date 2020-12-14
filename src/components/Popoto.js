@@ -12,33 +12,29 @@ class Popoto extends Component {
 
     popotoConfig() {
         // Demo Neo4j database settings hosted on GrapheneDb
-        popoto.rest.PROTOCOL = "https";
-        popoto.rest.HOST = "db-d0nijwvvx54p9aalxhmr.graphenedb.com";
-        popoto.rest.PORT = "24780";
+        // popoto.rest.PROTOCOL = "https";
+        // popoto.rest.HOST = "db-d0nijwvvx54p9aalxhmr.graphenedb.com";
+        // popoto.rest.PORT = "24780";
 
         //neo4j://neo4j-core-b9dcbc7d-27.production-orch-0006.neo4j.io:7687
 
         // popoto.rest.AUTHORIZATION = "neo4j:5QcMcr8g_0LU3H33qjdRUjNqjdYIt2eXy0Xd7UN8Gaw";
         
-        popoto.rest.USERNAME = "neo4j";
-        popoto.rest.PASSWORD = "cdb-d0nijwvvx54";
-        popoto.rest.CONFIG = {trust: "TRUST_ALL_CERTIFICATES"};
-        popoto.rest.WITH_CREDENTIALS = false;
-        popoto.rest.ENCRYPTION = "ENCRYPTION_ON";
+        // popoto.rest.USERNAME = "neo4j";
+        // popoto.rest.PASSWORD = "5QcMcr8g_0LU3H33qjdRUjNqjdYIt2eXy0Xd7UN8Gaw";
+        
 
         //Game of thronesDB
-        // popoto.rest.CYPHER_URL = "https://db-d0nijwvvx54p9aalxhmr.graphenedb.com:24780/db/neo4j/tx/commit";
-        // popoto.rest.AUTHORIZATION = "neo4j db-d0nijwvvx54";
+        // popoto.rest.CYPHER_URL = "https://db-d0nijwvvx54p9aalxhmr.graphenedb.com:24786/db/neo4j/tx";
+        // popoto.rest.AUTHORIZATION = "neo4j:db-d0nijwvvx54";
 
         //MovieDB
         popoto.rest.CYPHER_URL = "https://db-kh9ct9ai1mqn6hz2itry.graphenedb.com:24780/db/data/transaction/commit";
         popoto.rest.AUTHORIZATION = "Basic cG9wb3RvOmIuVlJZQVF2blZjV2tyLlRaYnpmTks5aHp6SHlTdXk=";
 
-        // var data = {
-        //     blah: "bob"
-        // }
-
-        // popoto.rest.post(URL, data);
+        popoto.rest.CONFIG = {trust: "TRUST_ALL_CERTIFICATES"};
+        popoto.rest.WITH_CREDENTIALS = false;
+        popoto.rest.ENCRYPTION = "ENCRYPTION_ON";
         
         // function createDriver(){
             
@@ -51,8 +47,6 @@ class Popoto extends Component {
         //     );
         // }
 
-        // Define the list of label provider to customize the graph behavior:
-        // Only two labels are used in Neo4j movie graph example: "Movie" and "Person"
         popoto.provider.node.Provider = {
             "Movie": {
                 "returnAttributes": ["title", "released", "tagline"],
