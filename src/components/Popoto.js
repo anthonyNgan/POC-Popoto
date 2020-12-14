@@ -1,7 +1,5 @@
 import './Popoto.css';
-import * as d3 from 'd3';
 import * as popoto from 'popoto';
-import * as neo4j from 'neo4j-driver';
 import React, { Component } from 'react';
 
 class Popoto extends Component {
@@ -11,23 +9,8 @@ class Popoto extends Component {
     }
 
     popotoConfig() {
-        // Demo Neo4j database settings hosted on GrapheneDb
-        // popoto.rest.PROTOCOL = "https";
-        // popoto.rest.HOST = "db-d0nijwvvx54p9aalxhmr.graphenedb.com";
-        // popoto.rest.PORT = "24780";
-
-        //neo4j://neo4j-core-b9dcbc7d-27.production-orch-0006.neo4j.io:7687
-
-        // popoto.rest.AUTHORIZATION = "neo4j:5QcMcr8g_0LU3H33qjdRUjNqjdYIt2eXy0Xd7UN8Gaw";
-        
-        // popoto.rest.USERNAME = "neo4j";
-        // popoto.rest.PASSWORD = "5QcMcr8g_0LU3H33qjdRUjNqjdYIt2eXy0Xd7UN8Gaw";
-        
-
         //Game of thronesDB
         popoto.rest.CYPHER_URL = "https://db-d0nijwvvx54p9aalxhmr.graphenedb.com:24780/db/neo4j/tx/commit";
-        // popoto.rest.AUTHORIZATION = "neo4j:db-d0nijwvvx54";
-
         popoto.rest.AUTHORIZATION = "Basic " + btoa("neo4j:db-d0nijwvvx54");
 
         //MovieDB
@@ -38,21 +21,12 @@ class Popoto extends Component {
         popoto.rest.WITH_CREDENTIALS = false;
         popoto.rest.ENCRYPTION = "ENCRYPTION_ON";
         
-        // function createDriver(){
-            
-        //     return neo4j.driver(
-        //         popoto.rest.PROTOCOL + "://" + popoto.rest.HOST + ":" + popoto.rest.PORT + "/db/neo4j/tx/commit",
-        //         neo4j.auth.basic(popoto.rest.USERNAME, popoto.rest.PASSWORD),
-        //         popoto.rest.CONFIG,
-        //         popoto.rest.AUTHORIZATION = false
-                
-        //     );
-        // }
 
         popoto.provider.node.Provider = {
             "Character": {
                 "returnAttributes": ["name", "pagerank", "community"],
                 "constraintAttribute": "name",
+                // "autoExpandRelations": true, // if set to true Person nodes will be automatically expanded in graph
                 "displayResults": function (pResultElmt) {
                     // Here D3.js mechanisms is used to generate HTML code.
                     // By default Popoto.js generates a <p> element for each result.
@@ -62,7 +36,7 @@ class Popoto extends Component {
                     pResultElmt.append("h3")
                         .text(function (result) {
                             return result.attributes.name;
-                        });
+                     });
                 }
             }
         };
@@ -70,9 +44,7 @@ class Popoto extends Component {
         popoto.result.RESULTS_PAGE_SIZE = 20;
         // Add a listener on returned result count to update count in page
         popoto.result.onTotalResultCount(function (count) {
-            d3.select("#rescount").text(function (d) {
-                return "(" + count + ")";
-            })
+            document.getElementById("result-total-count").innerHTML = "(" + count + ")";
         });
         // Add a listener on new relation added
         popoto.graph.on(popoto.graph.Events.GRAPH_NODE_RELATION_ADD, function (relations) {
@@ -97,25 +69,32 @@ class Popoto extends Component {
 
         return (
             <div>
-                <section className="ppt-section-main">
-                    <div className="ppt-section-header">
-                        <span className="ppt-header-span">Proof of Concept - Game of Thrones DB</span>
-                    </div>
+                <section class="ppt-section-main">
+    <div class="ppt-section-header">
+        <span class="ppt-header-span">Graph</span> search
+    </div>
 
-                    <div id="popoto-graph" className="ppt-div-graph">
-                    </div>
+    <div class="ppt-container-graph">
+        <nav id="popoto-taxonomy" class="ppt-taxo-nav">
+        </nav>
+        <div id="popoto-graph" class="ppt-div-graph">
+        </div>
+    </div>
 
-                    <div id="popoto-cypher" className="ppt-container-query">
-                    </div>
+    <div id="popoto-query" class="ppt-container-query">
+    </div>
 
-                    <div className="ppt-section-header">
-                        RESULTS <span id="rescount" className="ppt-count"></span>
-                    </div>
+    <div id="popoto-cypher" class="ppt-container-cypher">
+    </div>
 
-                    <div id="popoto-results" className="ppt-container-results">
-                    </div>
+    <div class="ppt-section-header">
+        RESULTS <span id="result-total-count" class="ppt-count"></span>
+    </div>
 
-                </section>
+    <div id="popoto-results" class="ppt-container-results">
+    </div>
+
+</section>
             </div>
         )
     }
